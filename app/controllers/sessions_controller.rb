@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
   def finish_auth
     if params.include?(:error)
       message = (params[:error] == 'access_denied') ? 'キャンセルされました' : 'エラーが発生しました'
-      redirect_to login_url
+      render :new
     end
 
     code = params.fetch(:code, :not_found)
@@ -29,7 +29,7 @@ class SessionsController < ApplicationController
       )
     rescue Slack::Web::Api::Error => e
       message = "エラーが発生しました:#{e}"
-      redirect_to login_url
+      render :new
     end
 
     workspace_code = response[:team_id]
