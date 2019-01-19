@@ -38,4 +38,9 @@ class SessionsController < ApplicationController
     user = User.upsert!(workspace_code, account_code, access_token)
     session[:user_id] = user.id  # todo: Userモデル
   end
+
+  def destroy
+    reset_session
+    render :new
+  end
 end
