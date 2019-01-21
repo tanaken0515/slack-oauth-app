@@ -3,11 +3,7 @@ class SessionsController < ApplicationController
   end
 
   def begin_auth
-    # slackの認証画面にリダイレクトする todo: 環境変数を使う
-    scope = 'aaa:bbbb,ccc:dddd'
-    client_id = 'xxxxxxxxxx.xxxxxxxxx'
-    uri = finish_auth_url
-    redirect_to "https://slack.com/oauth/authorize?scope=#{scope}&client_id=#{client_id}&redirect_uri=#{uri}"
+    redirect_to Slack::Auth.slack_authorize_url(finish_auth_url)
   end
 
   def finish_auth
