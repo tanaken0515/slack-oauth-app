@@ -15,7 +15,17 @@ class SessionsController < ApplicationController
 
     code = params.fetch(:code, :not_found)
     begin
-      response = Slack::Auth.oauth_access!(finish_auth_url, code)
+      slack_api = Slack::Auth.new(nil)
+      oauth_response = slack_api.oauth_access(finish_auth_url, code)
+    rescue Slack::Web::Api::Error => e
+      message = "エラーが発生しました:#{e.message}"
+      redirect_to login_url, notice: message
+      return
+    end
+
+    begin
+      slack_api = Slack::Auth.new(oauth_response[:access_token])
+      slack_api.auth_test
     rescue Slack::Web::Api::Error => e
       message = "エラーが発生しました:#{e.message}"
       redirect_to login_url, notice: message
