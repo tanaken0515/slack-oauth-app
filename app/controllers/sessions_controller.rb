@@ -22,11 +22,8 @@ class SessionsController < ApplicationController
       return
     end
 
-    workspace_code = response[:team_id]
-    account_code = response[:authorizing_user][:user_id]
-    access_token = response[:access_token]  # このtokenでリクエストが投げられるかを確認してもいいかもね
-    user = User.upsert!(workspace_code, account_code, access_token)
-    session[:user_id] = user.id  # todo: Userモデル
+    session[:access_token] = response[:access_token]
+    redirect_to login_url, notice: 'ログインしました' # todo: ログインしないと見れない系の画面にリダイレクトする
   end
 
   def destroy
