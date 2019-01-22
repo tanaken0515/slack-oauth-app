@@ -9,7 +9,8 @@ class SessionsController < ApplicationController
   def finish_auth
     if params.include?(:error)
       message = (params[:error] == 'access_denied') ? 'キャンセルされました' : 'エラーが発生しました'
-      render :new
+      redirect_to login_url, notice: message
+      return
     end
 
     code = params.fetch(:code, :not_found)
