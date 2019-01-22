@@ -14,19 +14,12 @@ class SessionsController < ApplicationController
     end
 
     code = params.fetch(:code, :not_found)
-    client = Slack::Web::Client.new
     begin
-      response = client.oauth_access(
-          {
-              client_id: 'xxxxxxxxxx.xxxxxxxxx',
-              client_secret: '***************',
-              redirect_uri: finish_auth_url,
-              code: code
-          }
-      )
+      response = Slack::Auth.oauth_access!(finish_auth_url, code)
     rescue Slack::Web::Api::Error => e
-      message = "エラーが発生しました:#{e}"
-      render :new
+      message = "エラーが発生しました:#{e.message}"
+      redirect_to login_url, notice: message
+      return
     end
 
     workspace_code = response[:team_id]
