@@ -43,7 +43,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    #todo: tokenを無効化したほうがいいかも auth.revoke API
+    Slack::Auth.new(session[:access_token]).auth_revoke
     reset_session
     redirect_to login_url, notice: 'ログアウトしました'
   end

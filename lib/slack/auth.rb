@@ -25,6 +25,14 @@ module Slack
       client.auth_test
     end
 
+    def auth_revoke
+      begin
+        client.auth_revoke
+      rescue Slack::Web::Api::Error => e
+        Rails.logger.error e.message
+      end
+    end
+
     private
 
     def client

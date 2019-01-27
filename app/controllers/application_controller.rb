@@ -9,11 +9,12 @@ class ApplicationController < ActionController::Base
       return false
     end
 
+    slack_api = Slack::Auth.new(session[:access_token])
     begin
       # 毎回APIリクエストを投げるのは多すぎる気がする。Rails.cacheに入れる？
-      Slack::Auth.new(session[:access_token]).auth_test
+      slack_api.auth_test
     rescue Slack::Web::Api::Error
-      # todo: tokenを無効化したほうがいいかも auth.revoke API
+      slack_api.auth_revoke
       reset_session
       return false
     end
