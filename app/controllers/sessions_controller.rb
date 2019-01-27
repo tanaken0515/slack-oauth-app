@@ -43,7 +43,8 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    #todo: tokenを無効化したほうがいいかも auth.revoke API
     reset_session
-    render :new
+    redirect_to login_url, notice: 'ログアウトしました'
   end
 end
