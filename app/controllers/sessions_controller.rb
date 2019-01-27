@@ -39,7 +39,7 @@ class SessionsController < ApplicationController
   end
 
   def show
-    @slack_user_info = '' #todo: ユーザ情報を取得する
+    @slack_user_info = session[:user]
   end
 
   def destroy
