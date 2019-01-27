@@ -38,6 +38,10 @@ class SessionsController < ApplicationController
     redirect_to login_url, notice: 'ログインしました' # todo: ログインしないと見れない系の画面にリダイレクトする
   end
 
+  def show
+    @slack_user_info = '' #todo: ユーザ情報を取得する
+  end
+
   def destroy
     reset_session
     render :new
