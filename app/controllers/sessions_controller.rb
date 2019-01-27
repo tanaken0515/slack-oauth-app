@@ -26,8 +26,7 @@ class SessionsController < ApplicationController
     end
 
     begin
-      slack_api = Slack::Auth.new(oauth_response[:access_token])
-      slack_api.auth_test
+      identity = Slack::Auth.new(oauth_response[:access_token]).identity
     rescue Slack::Web::Api::Error => e
       message = "エラーが発生しました:#{e.message}"
       redirect_to login_url, notice: message
@@ -35,6 +34,7 @@ class SessionsController < ApplicationController
     end
 
     session[:access_token] = oauth_response[:access_token]
+    session[:user] = identity[:user]
     redirect_to root_url, notice: 'ログインしました'
   end
 
