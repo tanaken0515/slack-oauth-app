@@ -34,8 +34,8 @@ class SessionsController < ApplicationController
       return
     end
 
-    session[:access_token] = response[:access_token]
-    redirect_to login_url, notice: 'ログインしました' # todo: ログインしないと見れない系の画面にリダイレクトする
+    session[:access_token] = oauth_response[:access_token]
+    redirect_to root_url, notice: 'ログインしました'
   end
 
   def show
