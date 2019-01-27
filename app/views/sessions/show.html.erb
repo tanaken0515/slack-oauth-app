@@ -1,0 +1,7 @@
+<h1>ログイン中しかアクセスできない画面</h1>
+<p>
+  <%= "#{@slack_user_info["name"]}(#{@slack_user_info["id"]})" %><br/>
+  <%= image_tag @slack_user_info["image_48"], alt: 'avatar' %>
+</p>
+<br/>
+<%= link_to 'ログアウト', logout_path, method: :delete %>

@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  skip_before_action :login_required, only: [:new, :begin_auth, :finish_auth, :destroy]
+
   def new
   end
 
@@ -24,20 +26,25 @@ class SessionsController < ApplicationController
     end
 
     begin
-      slack_api = Slack::Auth.new(oauth_response[:access_token])
-      slack_api.auth_test
+      identity = Slack::Auth.new(oauth_response[:access_token]).identity
     rescue Slack::Web::Api::Error => e
       message = "エラーが発生しました:#{e.message}"
       redirect_to login_url, notice: message
       return
     end
 
-    session[:access_token] = response[:access_token]
-    redirect_to login_url, notice: 'ログインしました' # todo: ログインしないと見れない系の画面にリダイレクトする
+    session[:access_token] = oauth_response[:access_token]
+    session[:user] = identity[:user]
+    redirect_to root_url, notice: 'ログインしました'
+  end
+
+  def show
+    @slack_user_info = session[:user]
   end
 
   def destroy
+    Slack::Auth.new(session[:access_token]).auth_revoke
     reset_session
-    render :new
+    redirect_to login_url, notice: 'ログアウトしました'
   end
 end
