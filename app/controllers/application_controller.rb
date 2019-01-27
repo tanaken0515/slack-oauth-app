@@ -4,6 +4,11 @@ class ApplicationController < ActionController::Base
   private
 
   def session_effective?
+    unless session[:access_token]
+      reset_session
+      return false
+    end
+
     begin
       # 毎回APIリクエストを投げるのは多すぎる気がする。Rails.cacheに入れる？
       Slack::Auth.new(session[:access_token]).auth_test
